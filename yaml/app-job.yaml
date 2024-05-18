@@ -1,0 +1,20 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        image: google/cloud-sdk:latest
+        command: ["/bin/sh", "-c"]
+        args: ["gsutil rsync -r /app/data gs://test_bucket"]
+        volumeMounts:
+        - name: app-storage
+          mountPath: /app/data
+      volumes:
+      - name: app-storage
+        emptyDir: {}
+      restartPolicy: OnFailure
